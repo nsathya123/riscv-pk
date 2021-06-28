@@ -41,7 +41,12 @@ static void uart_open(const struct fdt_scan_node *node, void *extra)
 static void uart_prop(const struct fdt_scan_prop *prop, void *extra)
 {
   struct uart_scan *scan = (struct uart_scan *)extra;
-  if (!strcmp(prop->name, "compatible") && fdt_string_list_index(prop, "sifive,uart0") >= 0) {
+	
+  if (!strcmp(prop->name, "compatible") && fdt_string_list_index(prop, "shakti,uart0") >= 0) {
+    scan->compat = 1;
+  } else  if (!strcmp(prop->name, "compatible") && fdt_string_list_index(prop, "shakti,uart1") >= 0) {
+    scan->compat = 1;
+  } else  if (!strcmp(prop->name, "compatible") && fdt_string_list_index(prop, "shakti,uart2") >= 0) {
     scan->compat = 1;
   } else if (!strcmp(prop->name, "reg")) {
     fdt_get_address(prop->node->parent, prop->value, &scan->reg);
@@ -53,10 +58,6 @@ static void uart_done(const struct fdt_scan_node *node, void *extra)
   struct uart_scan *scan = (struct uart_scan *)extra;
   if (!scan->compat || !scan->reg || uart) return;
 
-  // Enable Rx/Tx channels
-  uart = (void*)(uintptr_t)scan->reg;
-  uart[UART_REG_TXCTRL] = UART_TXEN;
-  uart[UART_REG_RXCTRL] = UART_RXEN;
 }
 
 void query_uart(uintptr_t fdt)
