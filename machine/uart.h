@@ -7,9 +7,11 @@
 
 extern volatile uint32_t* uart;
 
-#define UART_REG_TXFIFO		0
-#define UART_REG_RXFIFO		1
+#define UART_REG_TXFIFO		4
+#define UART_REG_RXFIFO		8
 #define UART_REG_TXCTRL		2
+#define UART_STATUS            0xC
+
 #define UART_REG_RXCTRL		3
 #define UART_REG_IE			4
 #define UART_REG_IP			5
