@@ -31,6 +31,7 @@ struct uart_scan
 {
   int compat;
   uint64_t reg;
+	uint16_t baud;
 };
 
 static void uart_open(const struct fdt_scan_node *node, void *extra)
@@ -51,16 +52,21 @@ static void uart_prop(const struct fdt_scan_prop *prop, void *extra)
     scan->compat = 1;
   } else if (!strcmp(prop->name, "reg")) {
     fdt_get_address(prop->node->parent, prop->value, &scan->reg);
-  }
+  } else if (!strcmp(prop->name, "current-speed")) {
+    // This is the property that Linux uses
+    scan->baud = fdt_get_value(prop, 0);
+  } 
 }
 
 static void uart_done(const struct fdt_scan_node *node, void *extra)
 {
-  struct uart_scan *scan = (struct uart_scan *)extra;
-  if (!scan->compat || !scan->reg || uart) return;
+	unsigned int baud_count = 0;
+	
+  	struct uart_scan *scan = (struct uart_scan *)extra;
+	baud_count = CLOCK_FREQUENCY / (16 * scan->baud);
 
+	uart[UART_REG_BAUD] = baud_count;
 }
-
 void query_uart(uintptr_t fdt)
 {
   struct fdt_cb cb;
