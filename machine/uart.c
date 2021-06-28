@@ -6,7 +6,8 @@
 
 volatile uint32_t* uart;
 
-#define STS_TX_FULL 1 << 1
+#define STS_TX_FULL         1 << 1
+#define STS_RX_NOT_EMPTY    1 << 2
 
 void uart_putchar(uint8_t ch)
 {
