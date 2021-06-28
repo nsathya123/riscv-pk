@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 extern volatile uint32_t* uart;
-
+#define UART_REG_BAUD 0
 #define UART_REG_TXFIFO		4
 #define UART_REG_RXFIFO		8
 #define UART_REG_TXCTRL		2
